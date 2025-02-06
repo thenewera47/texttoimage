@@ -6,10 +6,14 @@
   <title>AI Art Studio - New Era47</title>
   <style>
     :root {
-      --primary-color: #2563eb;
-      --secondary-color: #1e40af;
-      --background-color: #f8fafc;
-      --text-color: #1e293b;
+      /* Updated Color Palette */
+      --primary-color: #6c63ff;       /* Vibrant violet */
+      --secondary-color: #3f3d56;     /* Deep dark accent */
+      --accent-color: #ff6584;        /* A lively pink accent */
+      --background-color: #f5f7fa;    /* Light background */
+      --gradient-background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      --text-color: #333333;
+      --light-text: #666666;
     }
 
     * {
@@ -20,22 +24,29 @@
     }
 
     body {
-      background-color: var(--background-color);
+      background: var(--gradient-background);
       color: var(--text-color);
       line-height: 1.6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
     /* Navigation */
     .navbar {
-      background-color: white;
+      background-color: var(--primary-color);
       padding: 1rem 1.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       position: sticky;
       top: 0;
       z-index: 1000;
+      animation: slideDown 0.5s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .nav-content {
@@ -47,9 +58,14 @@
     }
 
     .logo {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: 700;
-      color: var(--primary-color);
+      color: #ffffff;
+      transition: transform 0.3s;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
     }
 
     .nav-links {
@@ -59,14 +75,15 @@
 
     .nav-links a {
       text-decoration: none;
-      color: var(--text-color);
+      color: #ffffff;
       font-weight: 500;
-      transition: color 0.3s;
+      transition: color 0.3s, transform 0.3s;
       cursor: pointer;
     }
 
     .nav-links a:hover {
-      color: var(--primary-color);
+      color: var(--accent-color);
+      transform: scale(1.05);
     }
 
     /* Main Content */
@@ -77,12 +94,22 @@
       flex: 1;
     }
 
+    /* Animation Class */
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* Image Generator Section */
     .generator-section {
-      background: white;
+      background: #ffffff;
       border-radius: 12px;
       padding: 1.5rem;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin-bottom: 1.5rem;
     }
 
@@ -102,28 +129,34 @@
       transition: border-color 0.3s;
     }
 
+    .prompt-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
     .generate-btn {
       padding: 0.8rem 1.5rem;
       background-color: var(--primary-color);
-      color: white;
+      color: #ffffff;
       border: none;
       border-radius: 8px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, transform 0.2s;
     }
 
     .generate-btn:hover {
       background-color: var(--secondary-color);
+      transform: scale(1.05);
     }
 
     /* Legal Pages */
     .legal-content {
-      background: white;
+      background: #ffffff;
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin-top: 1.5rem;
       display: none;
     }
@@ -152,17 +185,18 @@
 
     /* Footer */
     .footer {
-      background-color: white;
+      background-color: #ffffff;
       padding: 1.5rem;
       margin-top: auto;
-      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-in-out;
     }
 
     .footer-content {
       max-width: 1200px;
       margin: 0 auto;
       text-align: center;
-      color: #64748b;
+      color: var(--light-text);
       font-size: 0.9rem;
     }
 
@@ -191,8 +225,9 @@
       max-width: 100%;
       height: auto;
       border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin-top: 1rem;
+      animation: fadeIn 0.5s ease-in-out;
     }
 
     /* Responsive adjustments for mobile */
@@ -233,7 +268,7 @@
 
   <div class="container">
     <!-- Image Generator Section -->
-    <section class="generator-section" id="homeSection">
+    <section class="generator-section animate-fade-in" id="homeSection">
       <h1>AI Image Generator</h1>
       <div class="input-group">
         <input type="text" class="prompt-input" placeholder="Describe your image..." id="prompt" />
@@ -247,7 +282,7 @@
     </section>
 
     <!-- Privacy Policy -->
-    <div class="legal-content" id="privacySection">
+    <div class="legal-content animate-fade-in" id="privacySection">
       <h1>Privacy Policy of AI Arts Studio by The New Era47</h1>
       <p><strong>Effective Date:</strong> 06/02/2025</p>
       <div class="section">
@@ -315,7 +350,7 @@
     </div>
 
     <!-- Terms & Conditions -->
-    <div class="legal-content" id="termsSection">
+    <div class="legal-content animate-fade-in" id="termsSection">
       <h1>Terms & Conditions of AI Arts Studio by The New Era47</h1>
       <p><strong>Effective Date:</strong> 06/02/2025</p>
       <div class="section">
@@ -438,8 +473,8 @@
         generatedImageUrl = URL.createObjectURL(blob);
 
         resultContainer.innerHTML = `
-          <h3>Generated Image:</h3>
-          <img src="${generatedImageUrl}" class="generated-image">
+          <h3 class="animate-fade-in">Generated Image:</h3>
+          <img src="${generatedImageUrl}" class="generated-image animate-fade-in">
           <button class="generate-btn" onclick="downloadImage()" style="margin-top: 1rem;">
             Download Image
           </button>
@@ -463,18 +498,25 @@
       }
     }
 
-    // Page Navigation Logic
+    // Page Navigation Logic with animation
     function showSection(sectionId) {
+      // Hide all sections and remove animation class
       document.querySelectorAll('.legal-content, .generator-section').forEach(section => {
+        section.classList.remove('animate-fade-in');
         section.style.display = 'none';
       });
 
+      let sectionToShow;
       if (sectionId === 'home') {
-        document.getElementById('homeSection').style.display = 'block';
+        sectionToShow = document.getElementById('homeSection');
       } else {
-        document.getElementById(`${sectionId}Section`).style.display = 'block';
+        sectionToShow = document.getElementById(`${sectionId}Section`);
       }
-
+      
+      sectionToShow.style.display = 'block';
+      // Trigger fade-in animation
+      sectionToShow.classList.add('animate-fade-in');
+      
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
