@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Art Studio - New Era47</title>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #1e40af;
+      --background-color: #f8fafc;
+      --text-color: #1e293b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    .navbar {
+      background-color: white;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 500;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-color);
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+      flex: 1;
+    }
+
+    /* Image Generator Section */
+    .generator-section {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .prompt-input {
+      flex: 1;
+      padding: 0.8rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .generate-btn {
+      padding: 0.8rem 1.5rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .generate-btn:hover {
+      background-color: var(--secondary-color);
+    }
+
+    /* Legal Pages */
+    .legal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      margin-top: 1.5rem;
+      display: none;
+    }
+
+    .legal-content.active {
+      display: block;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+    }
+
+    h2 {
+      color: var(--secondary-color);
+      margin: 1.5rem 0 1rem;
+      font-size: 1.3rem;
+    }
+
+    ul {
+      list-style-type: disc;
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: white;
+      padding: 1.5rem;
+      margin-top: auto;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    /* Loading Spinner */
+    .loading-container {
+      display: none;
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e2e8f0;
+      border-top-color: var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .generated-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-top: 1rem;
+    }
+
+    /* Responsive adjustments for mobile */
+    @media (max-width: 600px) {
+      .nav-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .nav-links {
+        gap: 1rem;
+      }
+      .generator-section, .legal-content {
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      h2 {
+        font-size: 1.2rem;
+      }
+      .prompt-input, .generate-btn {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <div class="logo">AI Art Studio</div>
+      <div class="nav-links">
+        <a onclick="showSection('home')">Generator</a>
+        <a onclick="showSection('privacy')">Privacy Policy</a>
+        <a onclick="showSection('terms')">Terms</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Image Generator Section -->
+    <section class="generator-section" id="homeSection">
+      <h1>AI Image Generator</h1>
+      <div class="input-group">
+        <input type="text" class="prompt-input" placeholder="Describe your image..." id="prompt" />
+        <button class="generate-btn" onclick="generateImage()">Generate</button>
+      </div>
+      <div class="loading-container">
+        <div class="spinner"></div>
+        <p>Creating your artwork...</p>
+      </div>
+      <div id="result"></div>
+    </section>
+
+    <!-- Privacy Policy -->
+    <div class="legal-content" id="privacySection">
+      <h1>Privacy Policy of AI Arts Studio by The New Era47</h1>
+      <p><strong>Effective Date:</strong> 06/02/2025</p>
+      <div class="section">
+        <h2>1. Introduction</h2>
+        <p>
+          Welcome to AI Arts Studio ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, and protect your data through our AI-powered text-to-image generation services.
+        </p>
+      </div>
+      <div class="section">
+        <h2>2. Information We Collect</h2>
+        <ul>
+          <li><strong>Text Prompts and Parameters:</strong> Data entered by you for image generation.</li>
+          <li><strong>Technical Data:</strong> Your IP address, browser type, and device information.</li>
+          <li><strong>Usage Patterns:</strong> Information regarding frequency of use and preferred features.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>3. How We Use Your Data</h2>
+        <ul>
+          <li>To generate and deliver the requested AI artworks.</li>
+          <li>To improve our AI algorithms and overall service quality.</li>
+          <li>To prevent abuse or misuse of our platform.</li>
+          <li>To comply with legal obligations.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>4. Third-Party Sharing</h2>
+        <p>We share your data with the following entities:</p>
+        <ul>
+          <li><strong>Hugging Face API:</strong> For image generation processing.</li>
+          <li><strong>Cloud Service Providers:</strong> For secure data storage.</li>
+          <li><strong>Legal Authorities:</strong> When required by law.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>5. Data Security</h2>
+        <p>We implement several measures to safeguard your information, including:</p>
+        <ul>
+          <li><strong>SSL Encryption:</strong> For secure data transmission.</li>
+          <li><strong>Regular Security Audits:</strong> To ensure ongoing protection.</li>
+          <li><strong>Access Controls:</strong> To restrict access to personal data.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>6. User Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+          <li>Access your stored data.</li>
+          <li>Request the deletion of your personal information.</li>
+          <li>Opt-out of non-essential data collection (note that data essential for service delivery will be maintained).</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>7. Policy Changes</h2>
+        <p>
+          We may update this Privacy Policy periodically. Continued use of our services constitutes acceptance of any changes.
+        </p>
+      </div>
+      <div class="section">
+        <h2>8. Contact Us</h2>
+        <p>
+          For any privacy concerns or inquiries, please contact us via email at: <a href="mailto:dformulayt@gmail.com">dformulayt@gmail.com</a>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Terms & Conditions -->
+    <div class="legal-content" id="termsSection">
+      <h1>Terms & Conditions of AI Arts Studio by The New Era47</h1>
+      <p><strong>Effective Date:</strong> 06/02/2025</p>
+      <div class="section">
+        <h2>1. Acceptance of Terms</h2>
+        <p>By using our services, you agree to:</p>
+        <ul>
+          <li>These binding legal terms</li>
+          <li>Compliance with all applicable laws</li>
+          <li>Responsibility for the content you generate</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>2. Service Description</h2>
+        <p>We provide:</p>
+        <ul>
+          <li>AI-powered text-to-image conversion</li>
+          <li>Digital artwork generation</li>
+          <li>Temporary image hosting</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>3. User Responsibilities</h2>
+        <p>You must NOT:</p>
+        <ul>
+          <li>Generate illegal or offensive content</li>
+          <li>Reverse-engineer our systems</li>
+          <li>Use outputs for unlawful purposes</li>
+          <li>Share NSFW or abusive content</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>4. Intellectual Property</h2>
+        <ul>
+          <li>Users retain ownership of their prompts.</li>
+          <li>AI-generated images are licensed for both personal and commercial use.</li>
+          <li>Reselling API access is prohibited.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>5. Prohibited Content</h2>
+        <p>This includes, but is not limited to:</p>
+        <ul>
+          <li>Copyrighted material without authorization</li>
+          <li>Adult or explicit material</li>
+          <li>Hate speech or discriminatory content</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>6. Liability Limitations</h2>
+        <ul>
+          <li>We are not responsible for the accuracy of AI-generated content.</li>
+          <li>We are not responsible for third-party misuse of outputs.</li>
+          <li>We are not responsible for service interruptions.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>7. Termination Rights</h2>
+        <ul>
+          <li>We may suspend or terminate accounts for violations of these terms.</li>
+          <li>We may suspend or terminate accounts for suspicious activity.</li>
+          <li>We may suspend or terminate accounts to comply with legal requirements.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>8. Governing Law</h2>
+        <p>
+          These terms are governed by the laws of India / Maharashtra.
+        </p>
+      </div>
+      <div class="section">
+        <h2>9. Contact Information</h2>
+        <p>
+          For legal inquiries, please contact us via email at: <a href="mailto:dformulayt@gmail.com">dformulayt@gmail.com</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2024 AI Art Studio by New Era47. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Image Generation Logic
+    const YOUR_HF_TOKEN = "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";
+    const MODEL_ID = "stabilityai/stable-diffusion-xl-base-1.0";
+    let generatedImageUrl = null;
+
+    async function generateImage() {
+      const prompt = document.getElementById('prompt').value.trim();
+      const loadingContainer = document.querySelector('.loading-container');
+      const resultContainer = document.getElementById('result');
+
+      if (!prompt) {
+        alert('Please enter a prompt');
+        return;
+      }
+
+      loadingContainer.style.display = 'block';
+      resultContainer.innerHTML = '';
+
+      try {
+        const response = await fetch(
+          `https://api-inference.huggingface.co/models/${MODEL_ID}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${YOUR_HF_TOKEN}`
+            },
+            body: JSON.stringify({ inputs: prompt })
+          }
+        );
+
+        if (!response.ok) throw new Error('Image generation failed');
+
+        const blob = await response.blob();
+        generatedImageUrl = URL.createObjectURL(blob);
+
+        resultContainer.innerHTML = `
+          <h3>Generated Image:</h3>
+          <img src="${generatedImageUrl}" class="generated-image">
+          <button class="generate-btn" onclick="downloadImage()" style="margin-top: 1rem;">
+            Download Image
+          </button>
+        `;
+      } catch (error) {
+        console.error('Error:', error);
+        resultContainer.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+      } finally {
+        loadingContainer.style.display = 'none';
+      }
+    }
+
+    function downloadImage() {
+      if (generatedImageUrl) {
+        const link = document.createElement('a');
+        link.href = generatedImageUrl;
+        link.download = `ai-art-${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+
+    // Page Navigation Logic
+    function showSection(sectionId) {
+      document.querySelectorAll('.legal-content, .generator-section').forEach(section => {
+        section.style.display = 'none';
+      });
+
+      if (sectionId === 'home') {
+        document.getElementById('homeSection').style.display = 'block';
+      } else {
+        document.getElementById(`${sectionId}Section`).style.display = 'block';
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
